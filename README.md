@@ -6,4 +6,7 @@ To build and run the IDP:
     docker build --rm -t my/shibb-idp-tier .
     docker run -d --name shib-idp -p 443:443 my/shibb-idp-tier  
 
+## WARNING
 
+This project includes certs and keys used for demoing.  These must not be used in any sort of production capacity as the keys are essentially public domain now.
+`
