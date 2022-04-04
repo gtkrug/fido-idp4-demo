@@ -145,13 +145,11 @@ list of possible components and their options.
         </Attribute>
     </DataConnector>
 
-<!--
     <DataConnector id="GfipmTest" xsi:type="txdps:Test"
-                   pathToAttributeFiles="/opt/idp4/users/"
+                   pathToAttributeFiles="/opt/shibboleth-idp/config/users/"
                    uidAttribute="uid">
         <InputAttributeDefinition ref="uid" />
     </DataConnector>
--->
 
 
 <DataConnector id="iirHTTP" xsi:type="HTTP"

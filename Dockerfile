@@ -10,6 +10,7 @@ ARG SHBVIEWS=config/shib-idp/views
 ARG SHBEDWAPP=config/shib-idp/edit-webapp
 ARG SHBMSGS=config/shib-idp/messages
 ARG SHBMD=config/shib-idp/metadata
+ARG USERDIR=config/users
 
 # copy in those needed config files
 ADD ${TOMCFG} /usr/local/tomcat/conf
@@ -18,6 +19,7 @@ ADD ${TOMWWWROOT} /usr/local/tomcat/webapps/ROOT
 ADD ${SHBCFG} /opt/shibboleth-idp/conf
 ADD ${SHBCREDS} /opt/shibboleth-idp/credentials
 ADD ${SHBVIEWS} /opt/shibboleth-idp/views
+ADD ${USERDIR} /opt/shibboleth-idp/conf/users
 #ADD ${SHBEDWAPP} /opt/shibboleth-idp/edit-webapp
 #ADD ${SHBMSGS} /opt/shibboleth-idp/messages
 ADD ${SHBMD} /opt/shibboleth-idp/metadata
