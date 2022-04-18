@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+This file is a rudimentary example. While it is semi-functional, it isn't very
+interesting. It is here only as a starting point for your deployment process
+to avoid any dependency on components like an LDAP directory.
+
+Very few attribute definitions and data connectors are demonstrated, and the
+data is derived statically from the logged-in username and a static example
+connector.
+
+The file(s) in the examples directory contain more examples that involve more
+complex approaches. Deployers should refer to the documentation for a complete
+list of possible components and their options.
+-->
+<AttributeResolver
+        xmlns="urn:mace:shibboleth:2.0:resolver" 
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xmlns:txdps="urn:global:txdps:4.1:resolver"
+        xsi:schemaLocation="urn:mace:shibboleth:2.0:resolver http://shibboleth.net/schema/idp/shibboleth-attribute-resolver.xsd
+                            urn:global:txdps:4.1:resolver classpath:/schema/txdps-4.1-resolver.xsd">
+
+
+    <!--
+     The uid is the closest thing to a "standard" LDAP attribute
+     representing a local username, but you should generally *never*
+     expose uid to federated services, as it is rarely globally unique.
+    -->
+    <AttributeDefinition id="uid" xsi:type="PrincipalName" />
+
+
+    <!-- ========================================== -->
+    <!--      Attribute Definitions                 -->
+    <!-- ========================================== -->
+    <AttributeDefinition id="nief28CFR" xsi:type="Simple" >
+        <InputDataConnector ref="File" attributeNames="CFRCertified"/>
+    </AttributeDefinition>
+    <AttributeDefinition id="niefEmail" xsi:type="Simple" >
+        <InputDataConnector ref="File" attributeNames="email"/>
+    </AttributeDefinition>
+    <AttributeDefinition id="niefGivenName" xsi:type="Simple" >
+        <InputDataConnector ref="File" attributeNames="firstname"/>
+    </AttributeDefinition>
+    <AttributeDefinition id="niefSurName" xsi:type="Simple" >
+        <InputDataConnector ref="File" attributeNames="lastname"/>
+    </AttributeDefinition>
+    <AttributeDefinition id="niefIdentityProviderId" xsi:type="Template" >
+        <InputDataConnector ref="staticAttributes" attributeNames="orgid"/>
+        <Template>
+          <![CDATA[
+             NIEF:IDP:${orgid}
+          ]]>
+       </Template>
+    </AttributeDefinition>
+    <AttributeDefinition id="niefEmployer" xsi:type="Simple" >
+        <InputDataConnector ref="staticAttributes" attributeNames="employer"/>
+    </AttributeDefinition>
+    <AttributeDefinition id="niefFedId" xsi:type="Template" >
+        <InputDataConnector ref="staticAttributes" attributeNames="orgid"/>
+        <InputDataConnector ref="File" attributeNames="email"/>
+        <Template>
+          <![CDATA[
+               NIEF:IDP:${orgid}:USER:${email}
+          ]]>
+        </Template>
+    </AttributeDefinition>
+    <AttributeDefinition id="niefAAL" xsi:type="Simple" >
+        <InputDataConnector ref="File" attributeNames="aal"/>
+    </AttributeDefinition>
+    <AttributeDefinition id="niefIAL" xsi:type="Simple" >
+        <InputDataConnector ref="File" attributeNames="aal"/>
+    </AttributeDefinition>
+    <AttributeDefinition id="niefORI" xsi:type="Simple" >
+        <InputDataConnector ref="File" attributeNames="ori"/>
+    </AttributeDefinition>
+    <AttributeDefinition id="niefPSO" xsi:type="Simple" >
+        <InputDataConnector ref="File" attributeNames="pso"/>
+    </AttributeDefinition>
+    <AttributeDefinition id="niefSLEO" xsi:type="Simple" >
+        <InputDataConnector ref="File" attributeNames="sleo"/>
+    </AttributeDefinition>
+
+    <!-- ========================================== -->
+    <!--      Data Connectors                       -->
+    <!-- ========================================== -->
+    
+    <!--
+    Example LDAP Connector
+    
+    The connectivity details can be specified in ldap.properties to
+    share them with your authentication settings if desired.
+    -->
+    <DataConnector id="myLDAP" xsi:type="LDAPDirectory"
+        ldapURL="%{idp.attribute.resolver.LDAP.ldapURL}"
+        baseDN="%{idp.attribute.resolver.LDAP.baseDN}" 
+        principal="%{idp.attribute.resolver.LDAP.bindDN}"
+        principalCredential="%{idp.attribute.resolver.LDAP.bindDNCredential}"
+        useStartTLS="%{idp.attribute.resolver.LDAP.useStartTLS:true}"
+        connectTimeout="%{idp.attribute.resolver.LDAP.connectTimeout}"
+        responseTimeout="%{idp.attribute.resolver.LDAP.responseTimeout}">
+        <FilterTemplate>
+            <![CDATA[
+                %{idp.attribute.resolver.LDAP.searchFilter}
+            ]]>
+        </FilterTemplate>
+            <ConnectionPool
+            minPoolSize="%{idp.pool.LDAP.minSize:3}"
+            maxPoolSize="%{idp.pool.LDAP.maxSize:10}"
+            blockWaitTime="%{idp.pool.LDAP.blockWaitTime:PT3S}"
+            validatePeriodically="%{idp.pool.LDAP.validatePeriodically:true}"
+            validateTimerPeriod="%{idp.pool.LDAP.validatePeriod:PT5M}"
+            expirationTime="%{idp.pool.LDAP.idleTime:PT10M}" />
+    </DataConnector>
+
+    <DataConnector id="staticAttributes" xsi:type="Static">
+        <Attribute id="employer">
+            <Value>Interop'22 Test IDP</Value>
+        </Attribute>
+        <Attribute id="orgid">
+            <Value>interop-testbed-idp</Value>
+        </Attribute>
+    </DataConnector>
+
+    <DataConnector id="File" xsi:type="txdps:Test"
+                   pathToAttributeFiles="/opt/shibboleth-idp/users/"
+                   uidAttribute="uid">
+        <InputAttributeDefinition ref="uid" />
+    </DataConnector>
+
+
+<DataConnector id="iirHTTP" xsi:type="HTTP"
+      httpClientRef="shibboleth.NonCachingHttpClient">
+    <InputAttributeDefinition ref="niefEmail" />
+    <URLTemplate>
+        <![CDATA[
+        https://tca.iir.com/api/LookupTestCompleted?code=D7utRK84NO8sDTYRjh0UGP3fNXLjrH96FMlKs21YqcBpyTeZp6k/rw==
+        ]]>
+    </URLTemplate>
+
+    <BodyTemplate MIMEType="application/json">
+        <![CDATA[
+        { 'email': '$niefEmail.get(0)' }
+        ]]>
+    </BodyTemplate>
+
+    <ResponseMapping>
+        <Script>
+        <![CDATA[
+        var logger = Java.type("org.slf4j.LoggerFactory").getLogger("net.shibboleth.idp.attribute");
+
+        var HashSet = Java.type("java.util.HashSet");
+        var HttpClientSupport = Java.type("net.shibboleth.utilities.java.support.httpclient.HttpClientSupport");
+        var IdPAttribute = Java.type("net.shibboleth.idp.attribute.IdPAttribute");
+        var StringAttributeValue = Java.type("net.shibboleth.idp.attribute.StringAttributeValue");
+   
+        // Limits length to 64k
+        var body = HttpClientSupport.toString(response.getEntity(), "UTF-8", 65536);
+
+        logger.info("Query Response = " + body);
+
+        var result = JSON.parse(body);
+  
+        //logger.info("Parsed JSON Completed = " + result.completed);
+
+        var attr = new IdPAttribute("CFRCertified");
+        var values = new HashSet();
+        if (result.completed) {
+           values.add(new StringAttributeValue("true"));
+        } else {
+           values.add(new StringAttributeValue("false"));
+        }
+        attr.setValues(values);
+        connectorResults.add(attr);
+        ]]>
+        </Script>
+    </ResponseMapping>
+
+    <ResultCache expireAfterWrite="PT5M"/>
+  </DataConnector>
+
+
+</AttributeResolver>

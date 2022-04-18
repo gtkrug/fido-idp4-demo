@@ -1,0 +1,37 @@
+<EntityDescriptor entityID="https://interop22-idp.itec.tamu.edu/idp/shibboleth" xmlns="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:shibmd="urn:mace:shibboleth:metadata:1.0" xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+  <IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+    <Extensions>
+      <shibmd:Scope regexp="false">itec.tamu.edu</shibmd:Scope>
+    </Extensions>
+    <KeyDescriptor use="signing">
+      <ds:KeyInfo>
+        <ds:X509Data>
+          <ds:X509Certificate>
+MIIDTDCCAjSgAwIBAgIJANf4gZBWF3mpMA0GCSqGSIb3DQEBCwUAMCYxJDAiBgNV
+BAMMG2ludGVyb3AyMi1pZHAuaXRlYy50YW11LmVkdTAeFw0yMjA0MDQxOTU1NDda
+Fw0yNzA0MDMxOTU1NDdaMCYxJDAiBgNVBAMMG2ludGVyb3AyMi1pZHAuaXRlYy50
+YW11LmVkdTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMHWDerjgRW3
+cZIEmTd8UnoWpRwaoxZoqQphT1XlACH1dFkC3z+ifAW1ianeul1cv9TemBz8JZPU
+qWG5eQXjNPt8Bx9/bolahDgUxcmVk4WseWEAVtf17qjKgK6/QWvTJBsaq/fGgLH4
+o7A6G9jwysfVMnwIsLKTpT1Ld5M7Xzv5791+OxrmZJ7C4SqHkbi1N+CLQQEXnlpu
+DK2AVhstjhNxZLGIgmvYOQa1IC9aC81v26voyQ7VExx52NdUWFiKneZavkwQ1LtD
+8DflnyFM0+SKBsG/nEMXxvc1COVTgSSSpyrfkRcJ90DEVEHOWV1lET8XtRMvOgaD
+OeIHydMFxCsCAwEAAaN9MHswWgYDVR0RBFMwUYIbaW50ZXJvcDIyLWlkcC5pdGVj
+LnRhbXUuZWR1hjJodHRwczovL2ludGVyb3AyMi1pZHAuaXRlYy50YW11LmVkdS9p
+ZHAvc2hpYmJvbGV0aDAdBgNVHQ4EFgQUk7CiS/G0eufptqUdRA2aMwVZJL8wDQYJ
+KoZIhvcNAQELBQADggEBAA9Q87sEU6v/bH7oyh2Anols20L7WKULoBGXSZxjmKey
+PmaoibpDQzh+nO5vbr3aAVYZHKYkqVx022CZ31SeoUlMJRBopU+ToA3Fnhz5PbR6
+kIsj4TfZk6FqiI4ZIkoap7bVGxokBMY/5jcTzIp1i8EjiTLZW64qxTvrUr4Og95Q
+LIwdiZF9o6rEuOkv6Um8kECOufEyK89X3n3Ip0Sm/Rl3mAo0nyph9e+nXlNoLM1T
+qaxhauCvWGDMlxLOCOvm9P5s/+iIOvnC2Qb1LCF5mmIJt79raO0+oGsfOneZCuz5
+fcLRm9SJs8WZBv2IaTTWbpD1Uvc8BHzuPRvfSpQDKE8=
+          </ds:X509Certificate>
+        </ds:X509Data>
+      </ds:KeyInfo>
+    </KeyDescriptor>
+    <SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://interop22-idp.itec.tamu.edu/idp/profile/SAML2/Redirect/SSO"/>
+    <SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://interop22-idp.itec.tamu.edu/idp/profile/SAML2/POST/SSO"/>
+    <SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST-SimpleSign" Location="https://interop22-idp.itec.tamu.edu/idp/profile/SAML2/POST-SimpleSign/SSO"/>
+    <SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="https://interop22-idp.itec.tamu.edu/idp/profile/SAML2/SOAP/ECP"/>
+  </IDPSSODescriptor>
+</EntityDescriptor>

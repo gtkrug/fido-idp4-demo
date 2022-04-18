@@ -1,0 +1,67 @@
+
+version: '2.3'
+
+services:
+        
+  superldap:
+    image: bitnami/openldap:2
+    restart: unless-stopped
+    ports:
+      - '1389:1389'
+      - '1636:1636'
+    environment:
+      - LDAP_PORT_NUMBER=1389
+      - LDAP_ROOT=dc=interop22-demo,dc=org
+      - LDAP_ADMIN_USERNAME=admin
+      - LDAP_ADMIN_PASSWORD=hdaES8xn7G98yUQT
+      - LDAP_CONFIG_ADMIN_ENABLED=no
+      - LDAP_CONFIG_ADMIN_USERNAME=admin
+      - LDAP_CONFIG_ADMIN_PASSWORD=hdaES8xn7G98yUQT
+      - LDAP_USERS=user01,user02,user03,user04,officer01,officer02
+      - LDAP_PASSWORDS=bitnami1,bitnami2, bitnami2, bitnami2, bitnami2, bitnami2
+      - LDAP_USER_DC=users
+      - LDAP_GROUP=readers
+      - LDAP_EXTRA_SCHEMAS=cosine,inetorgperson,nis
+      - LDAP_SKIP_DEFAULT_TREE=no
+      - LDAP_CUSTOM_LDIF_DIR=/ldifs
+      - LDAP_CUSTOM_SCHEMA_FILE=/schema/custom.ldif
+      - LDAP_ULIMIT_NOFILES=1024
+      - LDAP_ALLOW_ANON_BINDING=yes
+    volumes:
+      - /opt/openldap:/bitnami/openldap
+
+  shib-db:
+    image: mariadb:10.3
+    container_name: shib-db
+    restart: unless-stopped
+    ports:
+      - "3356:3306"
+    volumes:
+      - /opt/db:/var/lib/mysql
+    healthcheck:
+      test: "/usr/bin/mysql --user=db_user \"--password=db_pw_11\" --execute \"SHOW DATABASES;\""
+      interval: 5s
+      timeout: 2s
+      retries: 5
+    environment:
+    - MYSQL_USER=db_user
+    - MYSQL_PASSWORD=db_pw_11
+    - MYSQL_ROOT_PASSWORD=db_pw_11
+    - MYSQL_DATABASE=idp1_db
+
+
+  idp1:
+    build:
+      context: ./idp1
+      dockerfile: Dockerfile
+    container_name: idp1
+    restart: unless-stopped
+    depends_on:
+      - superldap
+    ports:
+      - "8009:8009"
+    mem_limit: 4g
+    volumes:
+      - /opt/idp-1/users:/opt/shibboleth-idp/users
+
+
