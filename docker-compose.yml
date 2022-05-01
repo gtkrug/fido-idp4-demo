@@ -58,10 +58,107 @@ services:
     restart: unless-stopped
     depends_on:
       - superldap
+      - shib-db
     ports:
       - "8009:8009"
     mem_limit: 4g
     volumes:
       - /opt/idp-1/users:/opt/shibboleth-idp/users
+
+
+  idp-txdps:
+    build:
+      context: ./idp-txdps
+      dockerfile: Dockerfile
+    container_name: idp-txdps
+    restart: unless-stopped
+    depends_on:
+      - superldap
+      - shib-db
+    ports:
+      - "8109:8009"
+    mem_limit: 4g
+    volumes:
+      - /opt/idp-txdps/users:/opt/shibboleth-idp/users
+
+
+  idp-txampd:
+    build:
+      context: ./idp-txampd
+      dockerfile: Dockerfile
+    container_name: idp-txampd
+    restart: unless-stopped
+    depends_on:
+      - superldap
+      - shib-db
+    ports:
+      - "8209:8009"
+    mem_limit: 4g
+    volumes:
+      - /opt/idp-txampd/users:/opt/shibboleth-idp/users
+
+
+  ttf-idp:
+    build:
+      context: ./ttf-idp
+      dockerfile: Dockerfile
+    container_name: ttf-idp
+    restart: unless-stopped
+    depends_on:
+      - superldap
+      - shib-db
+    ports:
+      - "8309:8009"
+    mem_limit: 4g
+    volumes:
+      - /opt/ttf-idp/users:/opt/shibboleth-idp/users
+
+
+  brazos-idp:
+    build:
+      context: ./brazos-idp
+      dockerfile: Dockerfile
+    container_name: brazos-idp
+    restart: unless-stopped
+    depends_on:
+      - superldap
+      - shib-db
+    ports:
+      - "8409:8009"
+    mem_limit: 4g
+    volumes:
+      - /opt/brazos-idp/users:/opt/shibboleth-idp/users
+
+
+  tng-idp:
+    build:
+      context: ./tng-idp
+      dockerfile: Dockerfile
+    container_name: tng-idp
+    restart: unless-stopped
+    depends_on:
+      - superldap
+      - shib-db
+    ports:
+      - "8509:8009"
+    mem_limit: 4g
+    volumes:
+      - /opt/tng-idp/users:/opt/shibboleth-idp/users
+
+
+  arc-idp:
+    build:
+      context: ./arc-idp
+      dockerfile: Dockerfile
+    container_name: arc-idp
+    restart: unless-stopped
+    depends_on:
+      - superldap
+      - shib-db
+    ports:
+      - "8609:8009"
+    mem_limit: 4g
+    volumes:
+      - /opt/arc-idp/users:/opt/shibboleth-idp/users
 
 

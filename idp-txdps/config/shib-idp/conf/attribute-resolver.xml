@@ -67,7 +67,7 @@ list of possible components and their options.
         <InputDataConnector ref="File" attributeNames="aal"/>
     </AttributeDefinition>
     <AttributeDefinition id="niefIAL" xsi:type="Simple" >
-        <InputDataConnector ref="File" attributeNames="aal"/>
+        <InputDataConnector ref="File" attributeNames="ial"/>
     </AttributeDefinition>
     <AttributeDefinition id="niefORI" xsi:type="Simple" >
         <InputDataConnector ref="File" attributeNames="ori"/>
@@ -119,10 +119,10 @@ list of possible components and their options.
 
     <DataConnector id="staticAttributes" xsi:type="Static">
         <Attribute id="employer">
-            <Value>Interop'22 Test IDP</Value>
+            <Value>Texas DPS (DEMO)</Value>
         </Attribute>
         <Attribute id="orgid">
-            <Value>interop-testbed-idp</Value>
+            <Value>txdps-interop-idp</Value>
         </Attribute>
     </DataConnector>
 
